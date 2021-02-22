@@ -1,0 +1,57 @@
+$white: #fff;
+$secondary: #2b3035;
+$font-family-base: "PC", Arial, sans-serif;
+
+$modal-backdrop-opacity: 0.7;
+$navbar-padding-y: 0;
+$navbar-padding-x: 1rem;
+$navbar-dark-color: #fff;
+$navbar-brand-font-size: 1rem;
+$navbar-dark-hover-color: #fff;
+$navbar-dark-brand-color: white;
+
+@import '~bootstrap/scss/bootstrap';
+
+.navbar {
+  .container {
+      min-height: 56px;
+  }
+}
+
+.navbar {
+  .nav-link {
+    padding: 1rem 0;
+  }
+}
+
+.buttons {
+  margin-top: 35px;
+}
+
+.toast-container {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 99999;
+}
+
+.toast {
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+@mixin define-toast-color($name, $color, $bodyLighten, $headerDarken) {
+  .toast-#{ $name } {
+    background-color: lighten($color, $bodyLighten);
+    color: darken($color, 20%);
+
+    .toast-header {
+      background-color: lighten($color, $headerDarken);
+      color: darken($color, 20%);
+    }
+  }
+}
+
+@include define-toast-color('success', $success, 52%, 47%);
+@include define-toast-color('danger', $danger, 38%, 32%);
+@include define-toast-color('warning', $warning, 38%, 32%);
