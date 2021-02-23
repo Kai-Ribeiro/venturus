@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import Routes from './routes';
 import Navbar from './components/Navbar';
-import ToastProvider from './providers/ToastProvider';
+import Footer from './components/Footer';
 
 function AppContainer({ children }) {
   return children;
@@ -14,7 +14,6 @@ function AppContainer({ children }) {
 function App() {
   return (
     <div className="App">
-      <ToastProvider>
         <Router>
           <AppContainer>
             <Navbar/>
@@ -23,7 +22,7 @@ function App() {
             </div>
           </AppContainer>
         </Router>
-      </ToastProvider>
+        <Footer/>
     </div>
   );
 }

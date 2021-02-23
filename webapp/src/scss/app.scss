@@ -13,8 +13,10 @@ $navbar-dark-brand-color: white;
 @import '~bootstrap/scss/bootstrap';
 
 .navbar {
+  background-image: linear-gradient(230deg, #532d8c 0%, #d11a54f6 100%);
+  
   .container {
-      min-height: 56px;
+    min-height: 56px;
   }
 }
 
@@ -24,34 +26,46 @@ $navbar-dark-brand-color: white;
   }
 }
 
+.App {
+  height: 100vh;
+}
+
+.container {
+  height: 90%;
+}
+
+.card_pos {
+  height: 90vh;
+}
+
 .buttons {
   margin-top: 35px;
 }
 
-.toast-container {
-  position: fixed;
-  top: 8px;
-  right: 8px;
-  z-index: 99999;
+.space > div {
+  flex: 1;
 }
 
-.toast {
-  font-size: 1rem;
-  min-width: 150px;
+.footer {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  line-height: 60px;
+  background-color: #f5f5f5;
 }
 
-@mixin define-toast-color($name, $color, $bodyLighten, $headerDarken) {
-  .toast-#{ $name } {
-    background-color: lighten($color, $bodyLighten);
-    color: darken($color, 20%);
-
-    .toast-header {
-      background-color: lighten($color, $headerDarken);
-      color: darken($color, 20%);
-    }
-  }
+.btn-1 {
+  overflow: hidden;
+  color: #fff;
+  border-radius: 10px;
+  background-image: linear-gradient(230deg, #532d8c 0%, #d11a54f6 100%);
+  box-shadow: 0 0 0 0 rgba($color: #d11a54f6, $alpha: 1.0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-@include define-toast-color('success', $success, 52%, 47%);
-@include define-toast-color('danger', $danger, 38%, 32%);
-@include define-toast-color('warning', $warning, 38%, 32%);
+.title {
+  color: #532d8c;
+}
+
