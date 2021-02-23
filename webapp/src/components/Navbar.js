@@ -4,6 +4,7 @@ import {
   Navbar,
   NavbarBrand,
 } from 'reactstrap';
+import Nav from 'reactstrap/lib/Nav';
 
 function VNavbar() {
 
@@ -15,6 +16,7 @@ function VNavbar() {
           Squad Management Tool
         </NavbarBrand>
       </div>
+      <Nav className="align-items-center text-light" navbar>John Doe</Nav>
     </Navbar>
   );
 }
