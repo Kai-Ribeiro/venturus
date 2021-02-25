@@ -2,7 +2,7 @@ import React from 'react';
 import Card from 'reactstrap/lib/Card';
 import CardTitle from 'reactstrap/lib/CardTitle';
 import CardBody from 'reactstrap/lib/CardBody';
-import Button from 'reactstrap/lib/Button';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
 
@@ -10,12 +10,12 @@ export default function Home() {
     <>
       <div className="d-flex space">
         <div className="mr-5">
-          <Card className="card_pos">
+          <Card className="card_pos card-style">
             <CardBody>
               <div className="d-flex justify-content-between mb-2">
                 <CardTitle tag="h4" className="title">My Teams</CardTitle>
                 <div>
-                  <Button className="icon btn-1"><i className="fas fa-plus"></i></Button>
+                  <Link to="/create" className="icon btn btn-1"><i className="fas fa-plus"></i></Link>
                 </div>
               </div>
               <table className="table table-hover">
@@ -49,14 +49,14 @@ export default function Home() {
         </div>
         <div>
           <div>
-            <Card className="mb-5">
+            <Card className="mb-5 card-style">
               <CardBody>
                 <CardTitle tag="h4" className="title">Top 5</CardTitle>
               </CardBody>
             </Card>
           </div>
           <div>
-            <Card>
+            <Card className="card-style">
               <CardBody>
                 <CardTitle tag="h2"></CardTitle>
               </CardBody>

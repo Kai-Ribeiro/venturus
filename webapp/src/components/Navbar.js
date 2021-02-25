@@ -16,7 +16,10 @@ function VNavbar() {
           Squad Management Tool
         </NavbarBrand>
       </div>
-      <Nav className="align-items-center text-light" navbar>John Doe</Nav>
+      <div className="d-flex justify-content-between">
+        <Nav className="align-items-center text-light mr-2" navbar><nobr>John Doe</nobr></Nav>
+        <div className="avatar"><strong>JD</strong></div>
+      </div>
     </Navbar>
   );
 }
