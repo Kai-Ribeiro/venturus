@@ -16,15 +16,9 @@ $navbar-dark-brand-color: white;
 
 .navbar {
   background-image: linear-gradient(230deg, #8b1f6e 0%, #c00e4e 100%);
-  
+
   .container {
     min-height: 56px;
-  }
-}
-
-.navbar {
-  .nav-link {
-    padding: 1rem 0;
   }
 }
 
@@ -37,7 +31,6 @@ body {
 }
 
 .container {
-  height: 90%;
   max-width: 1500px;
 }
 
@@ -55,11 +48,12 @@ body {
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: #f7eef7;
+  color: #b13d7c;
 }
 
 .footer {
   text-align: center;
-  
+
   width: 100%;
   height: 40px;
   line-height: 40px;
@@ -69,8 +63,14 @@ body {
 .btn-1 {
   color: #fff;
   border-radius: 10px;
-  background-image: linear-gradient(230deg, #552c8a 0%, #d11a54f6 100%);
+  background-image: linear-gradient(180deg, #A8397D 0%, #822F7F 100%);
+  box-shadow: 0 2px 7px #A8397D;
   border: 0;
+}
+
+.btn-1:hover {
+  color: #fff;
+  box-shadow: 0 0 15px #A8397D;
 }
 
 .avatar {
@@ -91,8 +91,9 @@ body {
 }
 
 .hr-1 {
-  margin-left: -20px;
-  margin-right: -20px;
+  margin-left: -30px;
+  margin-right: -30px;
+  margin-top: 25px;
 }
 
 .center {
@@ -101,27 +102,67 @@ body {
 
 .card-form {
   height: 90%;
-  margin-top: 40px;
+  margin: 30px 30px 30px;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .team-info {
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: 0 10% 50px 10%;
   gap: 10%;
 }
 
+.select-form {
+  max-width: 30%;
+  margin-left: 30px;
+}
+
 .team-formation {
-  background-image: linear-gradient(230deg, #552c8a 0%, #d11a54f6 100%);
+  background-image: linear-gradient(180deg, #A8397D 0%, #822F7F 100%);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 
-  width: 100%;
-  max-width: 768px;
-  height: 50vh;
+  width: 350px;
   overflow: hidden;
+  border-radius: 0.25rem;
+  padding: 0 15px 0;
+  position: relative;
+}
 
-  margin: 0 auto;
-  padding: 15px;
+.line {
+  border: 1px solid rgba(255,255,255,.25);
+  width: 350px;
+  position: absolute;
+  margin-left: -15px;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.circle {
+  top: 50%;
+  width: 90px;
+  height: 90px;
+  left: calc(50% - 45px);
+  border-radius: 90px;
+  border: 1px solid rgba(255,255,255,.25);
+
+  position: absolute;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.save-button {
+  background-image: linear-gradient(180deg, #A8397D 0%, #822F7F 100%);
+  width: 350px;
+  border: 0;
+  margin-top: 15px;
+}
+
+.team-formation-row {
+  flex: 1;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .flexbox {
@@ -146,12 +187,22 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 30px;
-  background-color: #c999bf;
+  background-color: rgba(191, 149, 188, 0.8);
   background-image: $white;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px dashed #e6e6e6;
+  position: relative;
+}
+
+.board::before {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 70px;
+  border: 1px dashed #BF95BC;
+  position: absolute;
+  border-radius: 50%;
 }
 
 .card-filter {
@@ -168,6 +219,95 @@ p {
   padding: 0;
   margin: 0
 }
+
 p span{
   color: #d11a54f6;
+}
+
+.toast-container {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 99999;
+}
+
+.toast {
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+@mixin define-toast-color($name, $color, $bodyLighten, $headerDarken) {
+  .toast-#{ $name } {
+    background-color: lighten($color, $bodyLighten);
+    color: darken($color, 20%);
+
+    .toast-header {
+      background-color: lighten($color, $headerDarken);
+      color: darken($color, 20%);
+    }
+  }
+}
+
+@include define-toast-color('success', $success, 52%, 47%);
+@include define-toast-color('danger', $danger, 38%, 32%);
+@include define-toast-color('warning', $warning, 38%, 32%);
+
+.tags-input {
+	display: flex;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	min-height: 48px;
+	width: 480px;
+	padding: 0 8px;
+	border: 1px solid rgb(214, 216, 218);
+	border-radius: 6px;
+
+	input {
+		flex: 1;
+		border: none;
+		height: 46px;
+		font-size: 14px;
+		padding: 4px 0 0 0;
+		&:focus {
+			outline: transparent;
+      box-shadow: none;
+		}
+	}
+}
+
+#tags {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0;
+	margin: 8px 0 0 0;
+}
+
+.tag {
+	width: auto;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	padding: 0 8px;
+	list-style: none;
+	border-radius: 2rem;
+	margin: 0 8px 8px 0;
+	background: #c50341;
+	.tag-close-icon {
+		display: block;
+		width: 16px;
+		height: 16px;
+		line-height: 16px;
+		text-align: center;
+		margin-left: 8px;
+		color: #fff;
+		cursor: pointer;
+	}
+}
+
+@media screen and (max-width: 567px) {
+	.tags-input {
+    width: calc(100vw - 32px);
+	}
 }

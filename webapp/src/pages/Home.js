@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from 'reactstrap/lib/Card';
 import CardTitle from 'reactstrap/lib/CardTitle';
 import CardBody from 'reactstrap/lib/CardBody';
 import { Link } from 'react-router-dom';
+import TeamApi from '../api/TeamApi';
 
 export default function Home() {
+  const [ teams, setTeams ] = useState([]);
+
+  useEffect(() => {
+    setTeams(TeamApi.fetchAllTeams())
+  }, []);
+
+  const renderTeams = (data, index) => {
+    const { team } = data;
+    const actionButton = () => {
+      return (
+        <div>
+          <i style={{color: '#b13d7c'}} className="fas fa-pen mr-3"/>
+          <i style={{color: '#b13d7c'}} className="fas fa-trash"/>
+        </div>
+      )
+    };
+    return (
+      <tr key={ `${ index }` }>
+        <td>{ team.TeamName }</td>
+        <td className="d-flex justify-content-between">{ team.Description } { actionButton() } </td>
+      </tr>
+    )
+  };
 
   return (
     <>
@@ -15,7 +39,7 @@ export default function Home() {
               <div className="d-flex justify-content-between mb-2">
                 <CardTitle tag="h4" className="title">My Teams</CardTitle>
                 <div>
-                  <Link to="/create" className="icon btn btn-1"><i className="fas fa-plus"></i></Link>
+                  <Link to="/create" className="btn btn-1"><i className="fas fa-plus"></i></Link>
                 </div>
               </div>
               <table className="table table-hover">
@@ -26,22 +50,7 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Barcelona</td>
-                    <td>Barcelona Squad</td>
-                  </tr>
-                  <tr>
-                    <td>Real Madrid</td>
-                    <td>Real Madrid Squad</td>
-                  </tr>
-                  <tr>
-                    <td>Milan</td>
-                    <td>Milan Squad</td>
-                  </tr>
-                  <tr>
-                    <td>Liverpool</td>
-                    <td>Liverpool Squad</td>
-                  </tr>
+                  { teams.map(renderTeams) }
                 </tbody>
               </table>
             </CardBody>
