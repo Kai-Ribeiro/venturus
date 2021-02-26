@@ -12,19 +12,22 @@ import Col from 'reactstrap/lib/Col';
 import FormGroup from 'reactstrap/lib/FormGroup';
 import Row from 'reactstrap/lib/Row';
 import FootBallApi from '../../api/FootballApi';
-import Board from '../../components/Board';
-import CardDnD from '../../components/CardDnD';
+import Position from '../../components/Position';
+import Player from '../../components/Player';
 import Select from 'react-select';
 import TeamApi from '../../api/TeamApi';
 import Tag from '../../components/Tag';
+import { v4 as uuidv4 } from 'uuid';
+import { useParams } from 'react-router-dom';
 
 export default function TeamForm() {
   const [ players, setPlayers ] = useState([]);
   const [ playersPositions, setPlayersPositions ] = useState([]);
   const [ filteredPlayers, setFilteredPlayers ] = useState([]);
   const [ search, setSearch ] = useState("");
-  const [ formation, setFormation ] = useState([]);
+  const [ formation, setFormation ] = useState({});
   const [ team, setTeam ] = useState({});
+  const { teamId } = useParams();
   const [ errors, setErrors ] = useState(
     {
       TeamName: false,
@@ -51,6 +54,14 @@ export default function TeamForm() {
   }, [ search ]);
 
   useEffect(() => {
+    if (!teamId) return;
+
+    setTeam(TeamApi.fetchById(teamId));
+    setFormation(TeamApi.fetchById(teamId).Formation);
+    setPlayersPositions(TeamApi.fetchById(teamId).playersPositions)
+  }, [ teamId ]);
+
+  useEffect(() => {
     const sortedPlayers = players?.sort((a, b) => {
       if(a.firstname < b.firstname) { return -1; }
       if(a.firstname > b.firstname) { return 1; }
@@ -63,39 +74,58 @@ export default function TeamForm() {
     );
   }, [ search, players ]);
 
-  const renderFormationRow = (formationNumber, pos) => {
-    const positions = [];
-    const onDrop = (e, index) => {
+  const renderFormationObject = (line, col) => {
+
+    const onDrop = (e) => {
       const player = filteredPlayers.find((p) => (p.player_id).toString() === e.dataTransfer.getData('objectId'));
-      setPlayersPositions({...playersPositions, [index]: player});
+      const dataTransfer = e.dataTransfer.getData('playerId');
+
+      setTimeout(() => {
+        document.getElementById(dataTransfer).style.display = 'none';
+      }, 0);
+
+      setPlayersPositions({
+        ...playersPositions,
+        [line] : {  ...playersPositions[line], [col]: player, }
+      });
+
       return player;
     };
 
-    for (let i = 0; i < formationNumber; i++) {
-
-      positions.push(
-        <div key={`row-${ i }`}>
-          <Board className="board" onDrop={ (e) => onDrop(e, i) }/>
+    if (!playersPositions[line]) {
+      return (
+        <div key={`col-${ col }`}>
+          <Position className="position" onDrop={ (e) => onDrop(e) } player={ undefined } />
         </div>
       );
     }
-
-    const classRow = formationNumber === 1? 'around' : 'between';
-
     return (
-      <div key={ `position-row-${ pos }` } className={`d-flex justify-content-${ classRow } team-formation-row`}>
-        { positions }
+      <div key={`col-${ col }`}>
+        <Position className="position" onDrop={ (e) => onDrop(e) } player={ playersPositions[line][col] } />
       </div>
     );
   };
 
   const renderFormation = (formationStr) => {
     if (formationStr.value === undefined) return;
+
     const formations = formationStr.value.split(' - ');
 
-    return formations.map((formation, index) => {
-      return renderFormationRow(parseInt(formation), index);
-    });
+    const allL = [];
+    for (let l = 0; l < formations.length; l++) {
+      const allC = [];
+      const currentFormation = parseInt(formations[l]);
+      for (let c = 0; c < currentFormation; c++) {
+        allC.push(renderFormationObject(l, c));
+      }
+
+      const classRow = currentFormation === 1? 'around' : 'between';
+      allL.push(<div key={ `position-row-${ l }` }
+        className={`d-flex justify-content-${ classRow } team-formation-row`}>
+          { allC }
+      </div>)
+    }
+    return allL;
   };
 
   const handleChange = (evt) => {
@@ -128,7 +158,10 @@ export default function TeamForm() {
       return setErrors({...errors, TeamType: true});
     }
 
-    TeamApi.saveTeam({ team, playersPositions });
+    team.id = team.id || uuidv4();
+    team.playersPositions = playersPositions;
+    team.Formation = formation;
+    TeamApi.saveTeam(team);
   };
 
   const selectedTags = (tags) => {
@@ -163,7 +196,8 @@ export default function TeamForm() {
                   <Input
                     name="Description"
                     id="description"
-                    type="text"
+                    type="textarea"
+                    style={{height: 90}}
                     value={ team.Description ?? '' }
                     onChange={ handleChange }
                     invalid={ errors.Description }
@@ -193,6 +227,7 @@ export default function TeamForm() {
                               name="TeamType"
                               value="Real"
                               onChange={ handleChange }
+                              checked={ ['Real', 1].includes(team.TeamType) }
                               invalid={ errors.TeamType }
                             />
                             Real
@@ -207,6 +242,7 @@ export default function TeamForm() {
                               name="TeamType"
                               value="Fantasy"
                               onChange={ handleChange }
+                              checked={ ['Fantasy', 2].includes(team.TeamType) }
                               invalid={ errors.TeamType }
                             />
                             Fantasy
@@ -219,7 +255,7 @@ export default function TeamForm() {
 
                 <FormGroup>
                   <Label>Tags</Label>
-                  <Tag selectedTags={ selectedTags }/>
+                  <Tag selectedTags={ selectedTags } teamTags={ team.Tags }/>
                 </FormGroup>
               </div>
             </div>
@@ -230,20 +266,21 @@ export default function TeamForm() {
                   <Label>Formation</Label>
                   <Select
                     className="select-form"
-                    defaultValue={ formation?.value? { value: formation, label: formation } : null }
+                    value={ formation.value ? { value: formation.value, label: formation.label } : null }
                     isSearchable
                     placeholder=""
                     onChange={ (form) => setFormation(form) }
                     options={ [
-                      { value: '3 - 2 - 2 - 3', label: '3 - 2 - 2 - 3' },
-                      { value: '3 - 2 - 3 - 1', label: '3 - 2 - 3 - 1' },
-                      { value: '3 - 5 - 2', label: '3 - 5 - 2' },
-                      { value: '4 - 2 - 3 - 1', label: '4 - 2 - 3 - 1' },
-                      { value: '4 - 3 - 1 - 1', label: '4 - 3 - 1 - 1' },
-                      { value: '4 - 3 - 2', label: '4 - 3 - 2' },
-                      { value: '4 - 4 - 2', label: '4 - 4 - 2' },
-                      { value: '4 - 5 - 1', label: '4 - 5 - 1' },
-                      { value: '5 - 4 - 1', label: '5 - 4 - 1' },
+                      { value: '3 - 4 - 3 - 1', label: '3 - 4 - 3' },
+                      { value: '3 - 2 - 2 - 3 - 1', label: '3 - 2 - 2 - 3' },
+                      { value: '3 - 2 - 3 - 1 - 1', label: '3 - 2 - 3 - 1' },
+                      { value: '3 - 5 - 2 - 1', label: '3 - 5 - 2' },
+                      { value: '4 - 2 - 3 - 1 - 1', label: '4 - 2 - 3 - 1' },
+                      { value: '4 - 3 - 1 - 1 - 1', label: '4 - 3 - 1 - 1' },
+                      { value: '4 - 3 - 2 - 1', label: '4 - 3 - 2' },
+                      { value: '4 - 4 - 2 - 1', label: '4 - 4 - 2' },
+                      { value: '4 - 5 - 1 - 1', label: '4 - 5 - 1' },
+                      { value: '5 - 4 - 1 - 1', label: '5 - 4 - 1' },
                     ]
                   }
                   />
@@ -252,7 +289,6 @@ export default function TeamForm() {
                     <div className="line"/>
                     <div className="circle justify-content-around"/>
                       { renderFormation(formation) }
-                      { formation && renderFormationRow(1) }
                   </div>
                 <Button
                   hidden={ !formation }
@@ -272,9 +308,9 @@ export default function TeamForm() {
                     {
                       (filteredPlayers?.slice(0, 5)).map((p, index) => {
                         return (
-                          <CardDnD
-                            key={ `card-${ index }` } id={`card-${ index }`}
-                            className="card-filter"
+                          <Player
+                            key={ `player-${ index }` } id={`player-${ index }`}
+                            className="player-filter"
                             draggable="true"
                             objectId={ p.player_id }
                           >
@@ -283,7 +319,7 @@ export default function TeamForm() {
                               <p><strong>Age:</strong> <span>{ p.age }</span></p>
                             </div>
                             <p><strong>Nacionality:</strong> <span>{ p.nationality }</span></p>
-                          </CardDnD>
+                          </Player>
                         );
                       })
                     }
