@@ -13,19 +13,20 @@ export default function Home() {
   }, []);
 
   const renderTeams = (data, index) => {
-    const { team } = data;
     const actionButton = () => {
       return (
         <div>
-          <i style={{color: '#b13d7c'}} className="fas fa-pen mr-3"/>
+          <Link to={`/create/${ data.id }`}>
+            <i style={{color: '#b13d7c'}} className="fas fa-pen mr-3"/>
+          </Link>
           <i style={{color: '#b13d7c'}} className="fas fa-trash"/>
         </div>
       )
     };
     return (
       <tr key={ `${ index }` }>
-        <td>{ team.TeamName }</td>
-        <td className="d-flex justify-content-between">{ team.Description } { actionButton() } </td>
+        <td>{ data.TeamName }</td>
+        <td className="d-flex justify-content-between">{ data.Description } { actionButton() } </td>
       </tr>
     )
   };

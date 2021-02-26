@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from 'reactstrap';
 
-export default function Tag({ selectedTags }) {
-  const [ tags, setTags ] = useState([]);
+export default function Tag({ selectedTags, teamTags}) {
+  const [ tags, setTags ] = useState(teamTags || []);
+
+  useEffect(() => {
+    setTags(teamTags || []);
+  }, [ teamTags ]);
+
   const removeTags = (indexToRemove) => {
     setTags([...tags.filter((_, index) => index !== indexToRemove)]);
   }
@@ -30,7 +35,6 @@ export default function Tag({ selectedTags }) {
         ))}
       </ul>
       <Input
-        className="input-tag"
         type="text"
         onKeyUp={ (e) => e.key === "Enter" ? addTags(e) : null }
       />

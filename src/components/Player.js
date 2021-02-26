@@ -1,25 +1,20 @@
 import React from 'react';
 
-function CardDnD (props) {
+function Player (props) {
 
   const dragStart = (e) => {
     const target = e.target;
 
-    e.dataTransfer.setData('cardId', target.id);
+    e.dataTransfer.setData('playerId', target.id);
     e.dataTransfer.setData('objectId', props.objectId);
-
-    setTimeout(() => {
-      target.style.display = "none";
-    }, 0);
-
   }
 
   const dragOver = (e) => {
     e.stopPropagation();
   };
-  
+
 	return (
-		<div 
+		<div
 			id={ props.id }
 			className={ props.className }
       draggable={ props.draggable }
@@ -31,4 +26,4 @@ function CardDnD (props) {
 	)
 }
 
-export default CardDnD;
+export default Player;

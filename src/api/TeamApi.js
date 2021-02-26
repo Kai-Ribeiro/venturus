@@ -16,13 +16,20 @@ export default class TeamApi {
   static saveTeam(attributes = {}) {
     const teams = this.fetchAllTeams();
 
-    const index = teams.findIndex((t) => t.TeamName === attributes.TeamName);
+    const index = teams.findIndex((t) => t.id === attributes.id);
     if (index === -1) {
       teams.push(attributes);
     } else {
       teams[index] = attributes;
     }
     persistTeams(JSON.stringify(teams));
+  }
+
+  static fetchById(teamId) {
+    const teams = this.fetchAllTeams();
+    const team = teams.find((t) => t.id === teamId); 
+  
+    return team; 
   }
 
 }

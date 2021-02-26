@@ -11,6 +11,7 @@ export default function Routes() {
   <Switch>
     <Route path="/" component={Home} exact />
     <Route path="/create" component={TeamForm} exact/>
+    <Route path="/create/:teamId" component={TeamForm} exact/>
   </Switch>
 
   );
