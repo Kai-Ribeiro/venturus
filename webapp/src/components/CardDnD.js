@@ -6,6 +6,7 @@ function CardDnD (props) {
     const target = e.target;
 
     e.dataTransfer.setData('cardId', target.id);
+    e.dataTransfer.setData('objectId', props.objectId);
 
     setTimeout(() => {
       target.style.display = "none";
@@ -15,7 +16,8 @@ function CardDnD (props) {
 
   const dragOver = (e) => {
     e.stopPropagation();
-  }
+  };
+  
 	return (
 		<div 
 			id={ props.id }

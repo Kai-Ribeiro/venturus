@@ -6,6 +6,7 @@ import {
 import Routes from './routes';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ToastProvider from './providers/ToastProvider';
 
 function AppContainer({ children }) {
   return children;
@@ -14,6 +15,7 @@ function AppContainer({ children }) {
 function App() {
   return (
     <div className="App">
+      <ToastProvider>
         <Router>
           <AppContainer>
             <Navbar/>
@@ -23,6 +25,7 @@ function App() {
           </AppContainer>
         </Router>
         <Footer/>
+      </ToastProvider>
     </div>
   );
 }

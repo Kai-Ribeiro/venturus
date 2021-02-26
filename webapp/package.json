@@ -1,5 +1,5 @@
 {
-  "name": "weapp",
+  "name": "webapp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,10 +11,10 @@
     "query-string": "^6.13.5",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
-    "react-avatar": "^3.10.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
+    "react-select": "^4.1.0",
     "reactstrap": "^8.4.1",
     "sass": "^1.26.9",
     "sweetalert": "^2.1.2"

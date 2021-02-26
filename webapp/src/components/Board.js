@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function Board (props) {
+	const [ player, setPlayer ] = useState([]);
+
 	const drop = (e) => {
 		e.preventDefault();
-		const cardId = e.dataTransfer.getData('cardId');
+		const playerName = (props.onDrop(e).player_name).split(" ");
 
-		const card = document.getElementById(cardId);
-		card.style.display = 'block';
-
-		e.target.appendChild(card);
+		setPlayer(playerName[0][0] + '' + playerName[1][0]);
 	}
 
 	const dragOver = (e) => {
@@ -22,7 +21,8 @@ function Board (props) {
 			onDrop={drop}
 			onDragOver={dragOver}
 		>
-			{ props.children }
+			<i className="icon-color fas fa-plus" hidden={ player.length > 0 }/>
+			{ player }
 		</div>
 	)
 }
