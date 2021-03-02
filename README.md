@@ -18,7 +18,7 @@ git clone https://github.com/Kai-Ribeiro/venturus.git
 ````bash
 npm install
 ````
-4. Enter your API in .env
+4. Enter your API in .env.local
 ````bash
  REACT_APP_KEY = 'ENTER YOUR API'
 ````
