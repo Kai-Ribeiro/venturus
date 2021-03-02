@@ -11,7 +11,7 @@ npm install npm@latest -g
 
 2. Clone the repo
 ````bash
-git clone https://github.com/Kai-Ribeiro/venturus
+git clone https://github.com/Kai-Ribeiro/venturus.git
 ````
 
 3. Install NPM packges
