@@ -1,4 +1,4 @@
-# Venturus
+# Venturus-1.0.0
 
 ## Prerequisites
 - npm
