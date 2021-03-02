@@ -4,6 +4,10 @@ import CardTitle from 'reactstrap/lib/CardTitle';
 import CardBody from 'reactstrap/lib/CardBody';
 import { Link } from 'react-router-dom';
 import TeamApi from '../api/TeamApi';
+import TopFive from '../components/TopFive';
+import MostPicked from '../components/MostPicked';
+import DeleteAlert from '../components/DeleteAlert';
+import { Button } from 'reactstrap';
 
 export default function Home() {
   const [ teams, setTeams ] = useState([]);
@@ -13,13 +17,30 @@ export default function Home() {
   }, []);
 
   const renderTeams = (data, index) => {
+
+    const handleDelete = () => {
+			DeleteAlert({
+        title: `Are you sure about deleting it? ${ data.TeamName }`,
+				text: 'After delete, it won\'t be able to be recovered',
+				onDelete: () => {
+					return TeamApi.deleteTeam(data.id);
+				},
+				afterDelete: () => {
+					setTeams(teams.filter((i) => i.id !== data.id));
+				}
+			});
+		};
+
+
     const actionButton = () => {
       return (
         <div>
           <Link to={`/create/${ data.id }`}>
             <i style={{color: '#b13d7c'}} className="fas fa-pen mr-3"/>
           </Link>
-          <i style={{color: '#b13d7c'}} className="fas fa-trash"/>
+          <Button color="link" onClick={ () => handleDelete() }>
+            <i style={{color: '#b13d7c'}} className="fas fa-trash"/>
+          </Button>
         </div>
       )
     };
@@ -33,7 +54,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="d-flex space">
+      <div className="d-flex space w-100 pt-4 pb-0">
         <div className="mr-5">
           <Card className="card_pos card-style">
             <CardBody>
@@ -57,20 +78,16 @@ export default function Home() {
             </CardBody>
           </Card>
         </div>
-        <div>
-          <div>
-            <Card className="mb-5 card-style">
-              <CardBody>
-                <CardTitle tag="h4" className="title">Top 5</CardTitle>
-              </CardBody>
-            </Card>
-          </div>
-          <div>
-            <Card className="card-style">
-              <CardBody>
-                <CardTitle tag="h2"></CardTitle>
-              </CardBody>
-            </Card>
+        <div className="aside">
+          <Card className="mb-3 card-style">
+            <CardBody>
+              <CardTitle tag="h4" className="title">Top 5</CardTitle>
+              <hr/>
+              <TopFive teams={ teams }/>
+            </CardBody>
+          </Card>
+          <div style={{height: '30%'}}>
+            <MostPicked teams={ teams }/>
           </div>
         </div>
       </div>

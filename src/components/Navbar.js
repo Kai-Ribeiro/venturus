@@ -9,7 +9,7 @@ import Nav from 'reactstrap/lib/Nav';
 function VNavbar() {
 
   return (
-    <Navbar color="dark" dark expand="md" className="mb-2">
+    <Navbar color="dark" dark expand="md">
       <div className="container">
         <NavbarBrand to="#">
           <img src={Logo} alt="Venturus" height="30" className="mr-2"/>
