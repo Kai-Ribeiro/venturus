@@ -27,9 +27,21 @@ export default class TeamApi {
 
   static fetchById(teamId) {
     const teams = this.fetchAllTeams();
-    const team = teams.find((t) => t.id === teamId); 
-  
-    return team; 
+    const team = teams.find((t) => t.id === teamId);
+
+    return team;
+  }
+
+  static deleteTeam(teamId) {
+    const teams = this.fetchAllTeams();
+
+    const index = teams.findIndex((t) => t.id === teamId);
+    if (index > -1) {
+      teams.splice(index, 1);
+      persistTeams(JSON.stringify(teams));
+      return true;
+    }
+    return false;
   }
 
 }
